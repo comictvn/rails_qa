@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'app/models/user.rb'
+require_relative '../models/user'
 require 'app/models/user_answer.rb'
 
 module MatchingAlgorithm
