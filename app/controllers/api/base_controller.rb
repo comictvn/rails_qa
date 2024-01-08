@@ -99,6 +99,12 @@ module Api
     end
 
     def matches
+      unless params[:id].to_s.match?(/\A\d+\z/)
+        return render json: { message: "Wrong format." }, status: :bad_request
+      end
+
+      # Continue with existing code if "id" is a number
+
       begin
         user = User.find(params[:id])
       rescue ActiveRecord::RecordNotFound
