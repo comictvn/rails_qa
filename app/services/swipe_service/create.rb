@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'app/models/swipe'
 require 'app/models/match'
 require 'app/models/user'
 
