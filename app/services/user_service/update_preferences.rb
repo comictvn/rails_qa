@@ -17,6 +17,7 @@ module UserService
         user.preferences = new_preferences
         if user.save
           # Assuming MatchingAlgorithmService exists and is used to recalculate matches
+          user.updated_at = Time.current
           MatchingAlgorithmService.new(user).execute
           { status: 'success', updated_preferences: user.preferences }
         else
