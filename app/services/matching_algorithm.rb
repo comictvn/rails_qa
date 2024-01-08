@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../models/user'
-require 'app/models/user_answer.rb'
 
 module MatchingAlgorithm
   def self.calculate_compatibility(user, other_users)
