@@ -1,4 +1,6 @@
 class UserAnswer < ApplicationRecord
+  has_many :questions, dependent: :destroy
+
   belongs_to :user
   belongs_to :personality_question
 
