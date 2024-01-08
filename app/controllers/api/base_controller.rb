@@ -24,6 +24,23 @@ module Api
       }
     end
 
+    def matches
+      # Implementation for listing matches or a placeholder if not yet implemented
+    end
+
+    def record_swipe
+      # Implementation for recording a swipe or a placeholder if not yet implemented
+    end
+
+      {
+        success: false,
+        full_messages: resource&.errors&.full_messages,
+        errors: resource&.errors,
+        error_message: error.message,
+        backtrace: error.backtrace
+      }
+    end
+
     private
 
     def base_render_record_not_found(_exception)
@@ -63,7 +80,7 @@ module Api
       @refresh_token_expires_in = token.refresh_expires_in
       @scope = token.scopes
     end
-
+    def current_resource_owner
     def current_resource_owner
       return super if defined?(super)
     end
