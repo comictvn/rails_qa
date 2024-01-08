@@ -1,5 +1,6 @@
 # typed: ignore
 module Api
+  require_relative '../../services/matching_service'
   class BaseController < ActionController::API
     include ActionController::Cookies
     include Pundit::Authorization
@@ -7,6 +8,7 @@ module Api
     # =======End include module======
 
     rescue_from ActiveRecord::RecordNotFound, with: :base_render_record_not_found
+    before_action :doorkeeper_authorize!, only: [:matches]
     rescue_from ActiveRecord::RecordInvalid, with: :base_render_unprocessable_entity
     rescue_from Exceptions::AuthenticationError, with: :base_render_authentication_error
     rescue_from ActiveRecord::RecordNotUnique, with: :base_render_record_not_unique
@@ -42,6 +44,31 @@ module Api
 
     def base_render_record_not_unique
       render json: { message: I18n.t('common.errors.record_not_uniq_error') }, status: :forbidden
+    end
+
+    def matches
+      begin
+        user = User.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        return render json: { message: "User not found." }, status: :not_found
+      end
+
+      begin
+        potential_matches = MatchingService.new.generate_potential_matches(user.id)
+        matches_response = potential_matches.map do |match|
+          {
+            id: match[:user].id,
+            age: match[:user].age,
+            gender: match[:user].gender,
+            location: match[:user].location,
+            interests: match[:user].interests,
+            compatibility_score: match[:score]
+          }
+        end
+        render json: { status: 200, matches: matches_response }, status: :ok
+      rescue => e
+        render json: { message: e.message }, status: :internal_server_error
+      end
     end
 
     def custom_token_initialize_values(resource, client)
