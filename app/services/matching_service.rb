@@ -1,4 +1,4 @@
-class MatchingService < BaseService
+module MatchingService
   require_relative 'matching_algorithm'
 
   def generate_potential_matches(user_id)
