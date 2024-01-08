@@ -12,5 +12,8 @@ Rails.application.routes.draw do
     get 'users/:id/matches', to: 'base#matches'
     put 'users/:id/preferences', to: 'users#update_preferences'
     post 'feedback', to: 'feedbacks#create'
+    post 'swipes', to: 'base_controller#record_swipe' # Added from new code
   end
+
+  # ... other routes ...
 end
