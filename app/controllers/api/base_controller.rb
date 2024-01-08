@@ -1,6 +1,8 @@
+
 # typed: ignore
 module Api
   require_relative '../../services/matching_service'
+  require_relative '../../models/user'
   class BaseController < ActionController::API
     include ActionController::Cookies
     include Pundit::Authorization
@@ -13,6 +15,10 @@ module Api
     rescue_from ActiveRecord::RecordNotUnique, with: :base_render_record_not_unique
     before_action :doorkeeper_authorize!, only: [:record_swipe, :matches]
     rescue_from Pundit::NotAuthorizedError, with: :base_render_unauthorized_error
+
+    def self.resource
+      controller_name.classify.constantize
+    end
 
     def error_response(resource, error)
       {
@@ -30,15 +36,6 @@ module Api
 
     def record_swipe
       # Implementation for recording a swipe or a placeholder if not yet implemented
-    end
-
-      {
-        success: false,
-        full_messages: resource&.errors&.full_messages,
-        errors: resource&.errors,
-        error_message: error.message,
-        backtrace: error.backtrace
-      }
     end
 
     private
@@ -80,7 +77,7 @@ module Api
       @refresh_token_expires_in = token.refresh_expires_in
       @scope = token.scopes
     end
-    def current_resource_owner
+
     def current_resource_owner
       return super if defined?(super)
     end
