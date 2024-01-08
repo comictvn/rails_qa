@@ -1,4 +1,3 @@
-
 class MatchingService < BaseService
   require_relative 'matching_algorithm'
 
@@ -18,6 +17,10 @@ class MatchingService < BaseService
 
       # Sort potential matches by compatibility score
       sorted_matches = potential_matches.sort_by { |match| match[:score] }.reverse
+
+      # Store the potential matches in a temporary data structure
+      # This line is redundant as sorted_matches is already being returned
+      # sorted_matches
 
       sorted_matches
     rescue StandardError => e
