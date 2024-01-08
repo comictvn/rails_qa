@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../models/match'
-require 'app/models/user'
+require_relative '../../models/user'
 
 module SwipeService
   class Create < BaseService
