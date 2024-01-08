@@ -7,8 +7,8 @@ require 'app/models/user'
 module SwipeService
   class Create < BaseService
     def record_swipe_action(swiper_id:, swiped_id:, direction:)
-      swiper = User.find_by(id: swiper_id)
-      swiped = User.find_by(id: swiped_id)
+      swiper = User.find(swiper_id)
+      swiped = User.find(swiped_id)
 
       return { swipe_recorded: false, match_created: false } unless swiper && swiped
 
@@ -16,7 +16,7 @@ module SwipeService
         user_id: swiper_id,
         swiped_id: swiped_id,
         direction: direction,
-        created_at: DateTime.current
+        created_at: Time.zone.now
       )
 
       reciprocal_swipe = Swipe.find_by(
@@ -26,7 +26,7 @@ module SwipeService
       )
 
       match_created = false
-      if reciprocal_swipe && direction == 'right'
+      if reciprocal_swipe && swipe.direction_right?
         Match.create(
           user_id: swiper_id,
           swiped_id: swiped_id,
@@ -35,7 +35,13 @@ module SwipeService
         match_created = true
       end
 
-      { swipe_recorded: swipe.persisted?, match_created: match_created }
+      begin
+        swipe.save!
+        { swipe_recorded: swipe.persisted?, match_created: match_created }
+      rescue ActiveRecord::RecordInvalid => e
+        logger.error "SwipeService::Create: #{e.message}"
+        { swipe_recorded: false, match_created: false }
+      end
     end
   end
 end
