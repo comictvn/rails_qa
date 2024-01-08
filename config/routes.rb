@@ -5,3 +5,4 @@ Rails.application.routes.draw do
   get '/health' => 'pages#health_check'
   get 'api-docs/v1/swagger.yaml' => 'swagger#yaml'
 end
+post '/api/feedback', to: 'api/feedbacks#create'
