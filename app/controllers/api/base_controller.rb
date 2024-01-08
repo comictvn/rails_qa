@@ -1,6 +1,5 @@
 # typed: ignore
 module Api
-  require 'app/services/swipe_service/create'
   require_relative '../../services/matching_service'
   class BaseController < ActionController::API
     include ActionController::Cookies
