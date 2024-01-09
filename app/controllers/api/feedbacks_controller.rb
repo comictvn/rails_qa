@@ -1,10 +1,11 @@
+
 # frozen_string_literal: true
 
 module Api
   class FeedbacksController < BaseController
     before_action :doorkeeper_authorize!
 
-    # def create
+    def create
       feedback_service = FeedbackService::Create.new(
         feedback_params[:user_id],
         feedback_params[:match_id],
@@ -18,7 +19,7 @@ module Api
       when :error
         render json: { status: 422, message: result[:message] }, status: :unprocessable_entity
       end
-    # end
+    end
 
     private
 
