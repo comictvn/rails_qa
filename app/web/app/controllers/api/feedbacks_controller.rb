@@ -3,11 +3,7 @@ class Api::FeedbacksController < ApplicationController
   before_action :doorkeeper_authorize!
 
   def create
-    feedback_service = FeedbackService::Create.new(
-      feedback_params[:user_id],
-      feedback_params[:matched_user_id],
-      feedback_params[:comment]
-    )
+    feedback_service = FeedbackService::Create.new(*feedback_params.values_at(:user_id, :matched_user_id, :comment))
     result = feedback_service.call
 
     case result[:status]
